@@ -1,25 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Met Preview</title>
+    <title>Met Museum Preview</title>
     <style>
-        .artwork { margin: 20px; padding: 10px; border: 1px solid #ddd; }
-        img { max-width: 300px; height: auto; }
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .artwork { border: 1px solid #ddd; padding: 15px; border-radius: 8px; }
+        .artwork img { width: 100%; height: 300px; object-fit: cover; border-radius: 4px; }
+        h3 { margin: 10px 0 5px; }
+        p { color: #666; margin: 5px 0; }
     </style>
 </head>
 <body>
-    <div id="status">Status: Page Loaded</div>
-    <div id="gallery"></div>
+    <h1>Met Museum Highlights</h1>
+    <div class="gallery" id="gallery"></div>
     <script>
-        // Test if JavaScript runs
-        document.getElementById('status').textContent = 'Status: JavaScript Running';
-        
-        // Minimal test image
-        document.getElementById('gallery').innerHTML = `
-            <div class="artwork">
-                <img src="https://images.metmuseum.org/CRDImages/ep/original/DT1567.jpg" alt="Test Image">
-                <h3>Test Image</h3>
-            </div>`;
+        const artworks = [
+            {
+                image: "https://images.metmuseum.org/CRDImages/ep/original/DT1567.jpg",
+                title: "Bridge over a Pond of Water Lilies",
+                artist: "Claude Monet"
+            },
+            {
+                image: "https://images.metmuseum.org/CRDImages/ep/original/DP346474.jpg",
+                title: "Wheat Field with Cypresses",
+                artist: "Vincent van Gogh"
+            },
+            {
+                image: "https://images.metmuseum.org/CRDImages/ep/original/DT1502.jpg",
+                title: "Self-Portrait with a Straw Hat",
+                artist: "Vincent van Gogh"
+            },
+            {
+                image: "https://images.metmuseum.org/CRDImages/ep/original/DP-14936-001.jpg",
+                title: "Still Life with Apples and a Pot of Primroses",
+                artist: "Paul Cézanne"
+            },
+            {
+                image: "https://images.metmuseum.org/CRDImages/ep/original/DP-20101-001.jpg",
+                title: "The Dance Class",
+                artist: "Edgar Degas"
+            },
+            {
+                image: "https://images.metmuseum.org/CRDImages/ep/original/DT1565.jpg",
+                title: "Garden at Sainte-Adresse",
+                artist: "Claude Monet"
+            },
+            {
+                image: "https://images.metmuseum.org/CRDImages/ep/original/DT1947.jpg",
+                title: "Young Woman with a Water Pitcher",
+                artist: "Johannes Vermeer"
+            },
+            {
+                image: "https://images.metmuseum.org/CRDImages/ep/original/DP145937.jpg",
+                title: "The Gulf of Marseilles Seen from L'Estaque",
+                artist: "Paul Cézanne"
+            },
+            {
+                image: "https://images.metmuseum.org/CRDImages/ep/original/DT1877.jpg",
+                title: "View of Toledo",
+                artist: "El Greco"
+            },
+            {
+                image: "https://images.metmuseum.org/CRDImages/ep/original/DP-19279-001.jpg",
+                title: "The Death of Socrates",
+                artist: "Jacques Louis David"
+            }
+        ];
+
+        document.getElementById('gallery').innerHTML = artworks
+            .map(art => `
+                <div class="artwork">
+                    <img src="${art.image}" alt="${art.title}">
+                    <h3>${art.title}</h3>
+                    <p>${art.artist}</p>
+                </div>
+            `).join('');
     </script>
 </body>
 </html>
