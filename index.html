@@ -1,8 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Met Gallery</title>
+    <title>Met Museum Archives</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        #gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .artwork-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .artwork-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        .artwork-info {
+            padding: 15px;
+        }
+        .artwork-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+        }
+        .artwork-info p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
     <div id="gallery"></div>
