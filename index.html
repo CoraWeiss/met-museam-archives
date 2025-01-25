@@ -1,64 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ASCII Art Gallery</title>
+    <title>Met API ASCII Art</title>
     <style>
-        body { font-family: Arial; max-width: 800px; margin: 20px auto; }
+        body { padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .artwork { display: flex; gap: 20px; margin: 20px 0; }
+        img { max-width: 500px; height: auto; }
         pre { 
             font-family: monospace;
-            line-height: 1;
-            font-size: 16px;
+            font-size: 8px;
+            line-height: 8px;
             background: black;
             color: white;
             padding: 20px;
-            margin: 10px 0;
+            white-space: pre;
         }
-        button {
-            padding: 10px;
-            margin: 5px;
-            cursor: pointer;
-        }
+        .error { color: red; }
     </style>
 </head>
 <body>
-    <h1>ASCII Art Gallery</h1>
-    <div>
-        <button onclick="showArt('triangle')">Triangle</button>
-        <button onclick="showArt('heart')">Heart</button>
-        <button onclick="showArt('star')">Star</button>
-    </div>
-    <pre id="art"></pre>
+    <h1>Met Artwork as ASCII</h1>
+    <button onclick="loadRandomArtwork()">Load Random Artwork</button>
+    <div id="artwork" class="artwork"></div>
 
     <script>
-        const artworks = {
-            triangle: [
-                "   *   ",
-                "  ***  ",
-                " ***** ",
-                "*******"
-            ].join('\n'),
-            heart: [
-                " *   * ",
-                "*** ***",
-                " ***** ",
-                "  ***  ",
-                "   *   "
-            ].join('\n'),
-            star: [
-                "   *   ",
-                " ***** ",
-                "  ***  ",
-                "*******",
-                "  ***  "
-            ].join('\n')
-        };
-        
-        function showArt(type) {
-            document.getElementById('art').textContent = artworks[type];
+        async function loadRandomArtwork() {
+            try {
+                // Get random artwork with image
+                const response = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q=painting');
+                const data = await response.json();
+                const randomId = data.objectIDs[Math.floor(Math.random() * data.objectIDs.length)];
+                
+                // Get artwork details
+                const artworkResponse = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${randomId}`);
+                const artwork = await artworkResponse.json();
+
+                document.getElementById('artwork').innerHTML = `
+                    <div>
+                        <h2>${artwork.title}</h2>
+                        <p>${artwork.artistDisplayName}</p>
+                        <img src="${artwork.primaryImage}" id="source" crossorigin="anonymous">
+                    </div>
+                    <div>
+                        <h2>ASCII Version</h2>
+                        <pre id="ascii">Loading ASCII...</pre>
+                    </div>
+                `;
+
+                // Convert to ASCII when image loads
+                document.getElementById('source').onload = convertToAscii;
+            } catch (error) {
+                document.getElementById('artwork').innerHTML = `
+                    <div class="error">Error loading artwork: ${error.message}</div>
+                `;
+            }
         }
 
-        // Show triangle by default
-        showArt('triangle');
+        function convertToAscii() {
+            const img = document.getElementById('source');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = 100;
+            canvas.height = 100 * (img.height / img.width);
+
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+            const chars = '@%#*+=-:. ';
+            let ascii = '';
+
+            for (let y = 0; y < canvas.height; y++) {
+                for (let x = 0; x < canvas.width; x++) {
+                    const idx = (y * canvas.width + x) * 4;
+                    const brightness = (pixels[idx] + pixels[idx + 1] + pixels[idx + 2]) / 3;
+                    const charIndex = Math.floor(brightness / 256 * chars.length);
+                    ascii += chars[charIndex];
+                }
+                ascii += '\n';
+            }
+
+            document.getElementById('ascii').textContent = ascii;
+        }
+
+        // Load initial artwork
+        loadRandomArtwork();
     </script>
 </body>
 </html>
