@@ -84,17 +84,30 @@
     <p class="description">Hover over the artwork to see how a computer might interpret it using ASCII characters.</p>
     
     <div class="controls">
-        <button onclick="loadRandomPainting('all')">Random Painting</button>
-        <button onclick="loadRandomPainting('portrait')">Portrait</button>
-        <button onclick="loadRandomPainting('landscape')">Landscape</button>
-        <button onclick="loadRandomPainting('still life')">Still Life</button>
-        <button onclick="loadRandomPainting('abstract')">Abstract</button>
-        <button onclick="loadRandomPainting('religious')">Religious</button>
+        <button id="randomPaintingBtn" data-genre="all">Random Painting</button>
+        <button data-genre="portrait">Portrait</button>
+        <button data-genre="landscape">Landscape</button>
+        <button data-genre="still life">Still Life</button>
+        <button data-genre="abstract">Abstract</button>
+        <button data-genre="religious">Religious</button>
     </div>
     
     <div id="gallery"></div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Event listener for buttons
+            document.querySelectorAll('.controls button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const genre = event.target.getAttribute('data-genre');
+                    loadRandomPainting(genre);
+                });
+            });
+            
+            // Initial load
+            loadRandomPainting('all');
+        });
+
         function convertToAscii(img, width = 100) {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
@@ -109,4 +122,23 @@
             const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
             
             // Optimized character set for better visual mapping
-            const chars = '@QB#NgWM8RDHdOKq9$6khEPXwmeZaoS2yjufF]}{tx1liv*>=)\\|?I/"r^;:_~,\'.
+            const chars = '@QB#NgWM8RDHdOKq9$6khEPXwmeZaoS2yjufF]}{tx1liv*>=)\\|?I/"r^;:_~,\'.-` ';
+            let ascii = '';
+            
+            // Process each pixel
+            for (let y = 0; y < canvas.height; y++) {
+                for (let x = 0; x < canvas.width; x++) {
+                    const idx = (y * canvas.width + x) * 4;
+                    // Enhanced brightness calculation with RGB weighting
+                    const brightness = (pixels[idx] * 0.299 + pixels[idx + 1] * 0.587 + pixels[idx + 2] * 0.114) / 255;
+                    const charIndex = Math.floor(brightness * (chars.length - 1));
+                    ascii += chars[charIndex];
+                }
+                ascii += '\n';
+            }
+            return ascii;
+        }
+
+        async function loadRandomPainting(genre = 'all') {
+            try {
+                const
