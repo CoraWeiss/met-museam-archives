@@ -100,6 +100,26 @@
                             <img src="${artwork.primaryImage}" alt="${artwork.title}">
                             <pre>Converting to ASCII...</pre>
                         </div>
+                        <div class="comparison">
+                            <div class="original">
+                                <h3>Original</h3>
+                                <img src="${artwork.primaryImage}" alt="${artwork.title}">
+                            </div>
+                            <div class="ascii-version">
+                                <h3>ASCII Version</h3>
+                                <pre style="position: static; opacity: 1; background: black;">Converting to ASCII...</pre>
+                            </div>
+                        </div>
+                        <style>
+                            .comparison {
+                                display: flex;
+                                gap: 20px;
+                                margin-top: 20px;
+                            }
+                            .original, .ascii-version {
+                                flex: 1;
+                            }
+                        </style>
                     `;
                     
                     const gallery = document.getElementById('gallery');
