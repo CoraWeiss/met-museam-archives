@@ -101,4 +101,24 @@
             
             // Calculate dimensions maintaining aspect ratio
             const aspectRatio = img.height / img.width;
-            canvas.width = width
+            canvas.width = width;
+            canvas.height = Math.floor(width * aspectRatio);
+            
+            // Draw and get pixel data
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+            
+            // Optimized character set for better visual mapping
+            const chars = '@QB#NgWM8RDHdOKq9$6khEPXwmeZaoS2yjufF]}{tx1liv*>=)\\|?I/"r^;:_~,\'.-` ';
+            let ascii = '';
+            
+            // Process each pixel
+            for (let y = 0; y < canvas.height; y++) {
+                for (let x = 0; x < canvas.width; x++) {
+                    const idx = (y * canvas.width + x) * 4;
+                    // Enhanced brightness calculation with RGB weighting
+                    const brightness = (pixels[idx] * 0.299 + pixels[idx + 1] * 0.587 + pixels[idx + 2] * 0.114) / 255;
+                    const charIndex = Math.floor(brightness * (chars.length - 1));
+                    ascii += chars[charIndex];
+                }
+                ascii += '\n';
