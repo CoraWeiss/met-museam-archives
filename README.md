@@ -1,6 +1,7 @@
 # ASCII Art Gallery: Met Museum Collection
 
 An interactive exploration of art interpretation through computational vision, using the Metropolitan Museum of Art's Open Access Collection.
+https://coraweiss.github.io/met-museum-archives/
 
 ## Project Overview
 This project converts masterpieces into ASCII art to explore how computers process and "understand" visual art. By overlaying ASCII characters directly onto paintings, we create a visual bridge between human artistic expression and machine interpretation.
