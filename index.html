@@ -1,23 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Test Page</title>
+    <title>Met Museum Archives</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
-        body { 
-            padding: 20px;
-            font-family: sans-serif;
-        }
-        .test-image {
-            width: 200px;
-            height: 200px;
-            background: #ddd;
-            margin: 20px 0;
-        }
+        body { padding: 20px; font-family: sans-serif; }
+        #status { margin-bottom: 20px; }
+        #gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .artwork { border: 1px solid #ddd; padding: 10px; }
     </style>
 </head>
 <body>
-    <h1>Test Page</h1>
-    <div class="test-image">Test Block</div>
-    <p>If you can see this text and a gray block above, the page is working.</p>
+    <h1>Met Museum Gallery</h1>
+    <div id="status">Loading...</div>
+    <div id="gallery"></div>
+    <script src="app.js"></script>
 </body>
 </html>
