@@ -1,29 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simple ASCII Test</title>
-    <style>
-        .container { padding: 20px; }
-        .test-square {
-            width: 100px;
-            height: 100px;
-            background: black;
-            margin-bottom: 20px;
-        }
-        #ascii {
-            font-family: monospace;
-            font-size: 12px;
-            white-space: pre;
-        }
-    </style>
+   <title>Simple ASCII Test</title>
+   <style>
+       .container { padding: 20px; }
+       .test-square { width: 100px; height: 100px; background: black; margin-bottom: 20px; }
+       #ascii { font-family: monospace; font-size: 12px; white-space: pre; }
+   </style>
 </head>
 <body>
-    <div class="container">
-        <div class="test-square"></div>
-        <pre id="ascii">Testing ASCII output:</pre>
-        <script>
-            document.getElementById('ascii').textContent += '\n@@@@\n@@@@\n@@@@\n@@@@';
-        </script>
-    </div>
+   <div class="container">
+       <div class="test-square"></div>
+       <pre id="ascii">Loading ASCII...</pre>
+   </div>
+
+   <script>
+       console.log('Script starting');
+       const ascii = document.getElementById('ascii');
+       console.log('ASCII element:', ascii);
+       ascii.textContent = '@@@@\n@@@@\n@@@@\n@@@@';
+       console.log('Text updated');
+   </script>
 </body>
 </html>
