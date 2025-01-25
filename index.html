@@ -64,3 +64,41 @@
             padding: 10px 20px;
             cursor: pointer;
             background: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #003d82;
+        }
+        .description {
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Understanding Art Through ASCII</h1>
+    <p class="description">Hover over the artwork to see how a computer might interpret it using ASCII characters.</p>
+    
+    <div class="controls">
+        <button onclick="loadRandomPainting('all')">Random Painting</button>
+        <button onclick="loadRandomPainting('portrait')">Portrait</button>
+        <button onclick="loadRandomPainting('landscape')">Landscape</button>
+        <button onclick="loadRandomPainting('still life')">Still Life</button>
+        <button onclick="loadRandomPainting('abstract')">Abstract</button>
+        <button onclick="loadRandomPainting('religious')">Religious</button>
+    </div>
+    
+    <div id="gallery"></div>
+
+    <script>
+        function convertToAscii(img, width = 100) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Calculate dimensions maintaining aspect ratio
+            const aspectRatio = img.height / img.width;
+            canvas.width = width
