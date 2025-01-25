@@ -3,7 +3,15 @@
 <head>
     <title>ASCII Art</title>
     <style>
-        pre { font-family: monospace; }
+        pre { 
+            font-family: monospace;
+            line-height: 1;
+            font-size: 16px;
+            letter-spacing: 2px;
+            background: black;
+            color: white;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
@@ -12,10 +20,10 @@
 
     <script>
         const art = [
-            "   *   ",
-            "  ***  ",
-            " ***** ",
-            "*******"
+            "   #####   ",
+            "  #######  ",
+            " ######### ",
+            "###########"
         ].join('\n');
         
         document.getElementById('art').textContent = art;
