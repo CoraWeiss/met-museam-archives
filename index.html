@@ -95,6 +95,69 @@
     <div id="gallery"></div>
 
     <script>
+        async function loadRandomPainting(genre = 'all') {
+            try {
+                const query = genre === 'all' ? 'painting' : `painting ${genre}`;
+                const searchUrl = `https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q=${query}&medium=Paintings`;
+                const response = await fetch(searchUrl);
+                const data = await response.json();
+                
+                if (!data.objectIDs?.length) {
+                    document.getElementById('gallery').innerHTML = '<p>No paintings found for this genre. Try another.</p>';
+                    return;
+                }
+
+                const randomId = data.objectIDs[Math.floor(Math.random() * data.objectIDs.length)];
+                const artworkUrl = `https://collectionapi.metmuseum.org/public/collection/v1/objects/${randomId}`;
+                const artworkResponse = await fetch(artworkUrl, {
+                    mode: 'cors',
+                    headers: {
+                        'Access-Control-Allow-Origin': '*'
+                    }
+                });
+                const artwork = await artworkResponse.json();
+
+                if (artwork.primaryImage) {
+                    const div = document.createElement('div');
+                    div.className = 'artwork';
+                    div.innerHTML = `
+                        <div class="artwork-info">
+                            <h2>${artwork.title}</h2>
+                            <p>${artwork.artistDisplayName || 'Unknown Artist'}, ${artwork.objectDate || 'Date unknown'}</p>
+                        </div>
+                        <div class="image-container">
+                            <img crossorigin="anonymous" src="${artwork.primaryImage}" alt="${artwork.title}">
+                            <pre class="ascii-overlay">Converting to ASCII...</pre>
+                        </div>
+                    `;
+                    
+                    const gallery = document.getElementById('gallery');
+                    gallery.innerHTML = '';
+                    gallery.appendChild(div);
+
+                    const img = div.querySelector('img');
+                    const pre = div.querySelector('.ascii-overlay');
+                    
+                    img.onload = () => {
+                        const rect = img.getBoundingClientRect();
+                        const width = Math.floor(rect.width / 8); // Adjust character width
+                        const ascii = convertToAscii(img, width);
+                        pre.textContent = ascii;
+                        
+                        // Calculate precise character dimensions
+                        const charWidth = rect.width / width;
+                        pre.style.fontSize = charWidth + 'px';
+                        pre.style.lineHeight = charWidth + 'px';
+                        pre.style.letterSpacing = '0px';
+                        pre.style.fontFamily = 'Courier, monospace';
+                    };
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('gallery').innerHTML = '<p>Error loading artwork. Please try again.</p>';
+            }
+        }
+
         function convertToAscii(img, width = 100) {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
@@ -115,4 +178,10 @@
             // Process each pixel
             for (let y = 0; y < canvas.height; y++) {
                 for (let x = 0; x < canvas.width; x++) {
-                    const idx = (y * canvas.width + x
+                    const idx = (y * canvas.width + x) * 4;
+                    // Enhanced brightness calculation with RGB weighting
+                    const brightness = (pixels[idx] * 0.299 + pixels[idx + 1] * 0.587 + pixels[idx + 2] * 0.114) / 255;
+                    const charIndex = Math.floor(brightness * (chars.length - 1));
+                    ascii += chars[charIndex];
+                }
+                ascii += '\n';
