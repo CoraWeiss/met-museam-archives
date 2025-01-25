@@ -1,51 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ASCII Art Hover</title>
+    <title>Image to ASCII</title>
     <style>
-        .image-container {
-            position: relative;
-            width: 300px;
-            margin: 20px;
+        .container {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
         }
-        img {
-            width: 100%;
-            display: block;
+        .original-image img {
+            width: 500px;
+            height: auto;
         }
-        .ascii-overlay {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            color: white;
+        .ascii-version {
             font-family: monospace;
             font-size: 4px;
             line-height: 4px;
             white-space: pre;
-            overflow: hidden;
-        }
-        .image-container:hover .ascii-overlay {
-            display: block;
+            background: black;
+            color: white;
+            padding: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="image-container">
-        <img id="test-image" src="https://images.metmuseum.org/CRDImages/ep/original/DT1567.jpg" alt="Monet">
-        <div id="ascii" class="ascii-overlay"></div>
+    <div class="container">
+        <div class="original-image">
+            <img id="test-image" src="https://images.metmuseum.org/CRDImages/ep/original/DT1567.jpg" alt="Monet">
+        </div>
+        <div id="ascii" class="ascii-version"></div>
     </div>
 
     <script>
         function generateASCII(img) {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            const chars = '@#8&OLlv+;:,.';
+            const chars = '@#8&OLlv+;:,. ';
             
-            canvas.width = 80;
-            canvas.height = 80 * (img.height / img.width);
+            canvas.width = 150;  // Increased resolution
+            canvas.height = 150 * (img.height / img.width);
             
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
             const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
