@@ -4,6 +4,12 @@
     <title>Met Paintings ASCII Art</title>
     <style>
         body { padding: 20px; max-width: 1200px; margin: 0 auto; background: #f5f5f5; }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
         .artwork { 
             background: white; 
             padding: 15px; 
@@ -12,13 +18,12 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
         }
         .container { display: flex; gap: 20px; }
-        .image-container { flex: 1; }
-        .ascii-container { flex: 1; }
+        .image-container, .ascii-container { flex: 1; }
         img { max-width: 100%; height: auto; border-radius: 4px; }
         pre { 
             font-family: monospace;
-            font-size: 6px;
-            line-height: 6px;
+            font-size: 8px;
+            line-height: 8px;
             background: black;
             color: white;
             padding: 10px;
@@ -27,7 +32,6 @@
         }
         button { 
             padding: 10px 20px; 
-            margin: 10px;
             cursor: pointer;
             background: #0056b3;
             color: white;
@@ -39,19 +43,30 @@
 </head>
 <body>
     <h1>Met Museum Paintings as ASCII</h1>
-    <button onclick="loadRandomPainting()">Load Random Painting</button>
+    <div class="controls">
+        <button onclick="loadRandomPainting('all')">Random Painting</button>
+        <button onclick="loadRandomPainting('portrait')">Portrait</button>
+        <button onclick="loadRandomPainting('landscape')">Landscape</button>
+        <button onclick="loadRandomPainting('still life')">Still Life</button>
+        <button onclick="loadRandomPainting('abstract')">Abstract</button>
+        <button onclick="loadRandomPainting('religious')">Religious</button>
+    </div>
     <div id="gallery"></div>
 
     <script>
-        const proxy = 'https://api.allorigins.win/raw?url=';
-        
-        async function loadRandomPainting() {
+        async function loadRandomPainting(genre = 'all') {
             try {
-                const searchUrl = 'https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q=painting&medium=Paintings';
+                const query = genre === 'all' ? 'painting' : `painting ${genre}`;
+                const searchUrl = `https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q=${query}&medium=Paintings`;
                 const response = await fetch(searchUrl);
                 const data = await response.json();
-                const randomId = data.objectIDs[Math.floor(Math.random() * data.objectIDs.length)];
                 
+                if (!data.objectIDs?.length) {
+                    document.getElementById('gallery').innerHTML = '<p>No paintings found for this genre. Try another.</p>';
+                    return;
+                }
+
+                const randomId = data.objectIDs[Math.floor(Math.random() * data.objectIDs.length)];
                 const artworkUrl = `https://collectionapi.metmuseum.org/public/collection/v1/objects/${randomId}`;
                 const artworkResponse = await fetch(artworkUrl);
                 const artwork = await artworkResponse.json();
@@ -100,13 +115,13 @@
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             
-            canvas.width = 80;
-            canvas.height = Math.floor(80 * (img.height / img.width));
+            canvas.width = 150;
+            canvas.height = Math.floor(150 * (img.height / img.width));
             
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
             const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
             
-            const chars = '@#8&OLlv+;:,. ';
+            const chars = '$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,"^`\'. ';
             let ascii = '';
             
             for (let y = 0; y < canvas.height; y += 1) {
@@ -120,7 +135,7 @@
             return ascii;
         }
 
-        loadRandomPainting();
+        loadRandomPainting('all');
     </script>
 </body>
 </html>
