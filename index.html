@@ -1,32 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ASCII Art</title>
+    <title>ASCII Art Gallery</title>
     <style>
+        body { font-family: Arial; max-width: 800px; margin: 20px auto; }
         pre { 
             font-family: monospace;
             line-height: 1;
             font-size: 16px;
-            letter-spacing: 2px;
             background: black;
             color: white;
             padding: 20px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>ASCII Art Test</h1>
+    <h1>ASCII Art Gallery</h1>
+    <div>
+        <button onclick="showArt('triangle')">Triangle</button>
+        <button onclick="showArt('heart')">Heart</button>
+        <button onclick="showArt('star')">Star</button>
+    </div>
     <pre id="art"></pre>
 
     <script>
-        const art = [
-            "   #####   ",
-            "  #######  ",
-            " ######### ",
-            "###########"
-        ].join('\n');
+        const artworks = {
+            triangle: [
+                "   *   ",
+                "  ***  ",
+                " ***** ",
+                "*******"
+            ].join('\n'),
+            heart: [
+                " *   * ",
+                "*** ***",
+                " ***** ",
+                "  ***  ",
+                "   *   "
+            ].join('\n'),
+            star: [
+                "   *   ",
+                " ***** ",
+                "  ***  ",
+                "*******",
+                "  ***  "
+            ].join('\n')
+        };
         
-        document.getElementById('art').textContent = art;
+        function showArt(type) {
+            document.getElementById('art').textContent = artworks[type];
+        }
+
+        // Show triangle by default
+        showArt('triangle');
     </script>
 </body>
 </html>
