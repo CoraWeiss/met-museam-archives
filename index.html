@@ -3,61 +3,53 @@
 <head>
     <title>Image to ASCII</title>
     <style>
-        .container {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-        }
-        .original-image img {
-            width: 500px;
-            height: auto;
-        }
+        .container { display: flex; gap: 20px; padding: 20px; }
+        img { width: 500px; height: auto; }
         .ascii-version {
             font-family: monospace;
-            font-size: 4px;
-            line-height: 4px;
+            font-size: 6px;
+            line-height: 6px;
             white-space: pre;
             background: black;
             color: white;
             padding: 10px;
+            width: 500px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="original-image">
-            <img id="test-image" src="https://images.metmuseum.org/CRDImages/ep/original/DT1567.jpg" alt="Monet">
-        </div>
-        <div id="ascii" class="ascii-version"></div>
+        <img id="test-image" src="https://images.metmuseum.org/CRDImages/ep/original/DT1567.jpg" alt="Monet">
+        <pre id="ascii" class="ascii-version">Loading ASCII...</pre>
     </div>
 
     <script>
         function generateASCII(img) {
+            console.log('Generating ASCII...');
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            const chars = '@#8&OLlv+;:,. ';
             
-            canvas.width = 150;  // Increased resolution
-            canvas.height = 150 * (img.height / img.width);
+            canvas.width = 100;
+            canvas.height = 100;
             
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
             const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
             
             let ascii = '';
-            for (let y = 0; y < canvas.height; y++) {
-                for (let x = 0; x < canvas.width; x++) {
+            for (let y = 0; y < canvas.height; y += 2) {
+                for (let x = 0; x < canvas.width; x += 2) {
                     const idx = (y * canvas.width + x) * 4;
                     const brightness = (pixels[idx] + pixels[idx + 1] + pixels[idx + 2]) / 3;
-                    const char = chars[Math.floor(brightness / 256 * chars.length)];
-                    ascii += char;
+                    ascii += brightness > 128 ? '@' : '.';
                 }
                 ascii += '\n';
             }
             return ascii;
         }
 
-        const img = document.getElementById('test-image');
-        img.onload = () => {
+        window.onload = () => {
+            const img = document.getElementById('test-image');
+            console.log('Image loaded, processing...');
             document.getElementById('ascii').textContent = generateASCII(img);
         };
     </script>
