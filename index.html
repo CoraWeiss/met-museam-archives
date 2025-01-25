@@ -1,51 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simple ASCII Test</title>
+    <title>ASCII Art</title>
     <style>
-        .container { padding: 20px; }
-        img { width: 200px; height: 200px; }
-        #ascii { 
-            font-family: monospace;
-            font-size: 8px;
-            line-height: 8px;
-            white-space: pre; 
-            background: black;
-            color: white;
-            padding: 10px;
-        }
+        pre { font-family: monospace; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img id="source" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH1AgCCQYjZNZJ6QAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAAApSURBVBjTY2RgYPgPxAwMDAwsIIaMgQQYydQMA40wMDAw/B9KYQcA5HIDxV+wzrwAAAAASUVORK5CYII=" crossorigin="anonymous">
-        <pre id="ascii">Loading ASCII...</pre>
-    </div>
+    <h1>ASCII Art Test</h1>
+    <pre id="art"></pre>
 
     <script>
-        const img = document.getElementById('source');
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-
-        img.onload = () => {
-            canvas.width = 40;
-            canvas.height = 40;
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            
-            const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-            let ascii = '';
-            
-            for (let y = 0; y < canvas.height; y++) {
-                for (let x = 0; x < canvas.width; x++) {
-                    const idx = (y * canvas.width + x) * 4;
-                    const brightness = (pixels[idx] + pixels[idx + 1] + pixels[idx + 2]) / 3;
-                    ascii += brightness > 128 ? '@' : '.';
-                }
-                ascii += '\n';
-            }
-            
-            document.getElementById('ascii').textContent = ascii;
-        };
+        const art = [
+            "   *   ",
+            "  ***  ",
+            " ***** ",
+            "*******"
+        ].join('\n');
+        
+        document.getElementById('art').textContent = art;
     </script>
 </body>
 </html>
