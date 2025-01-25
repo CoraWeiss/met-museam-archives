@@ -1,59 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Image to ASCII</title>
+    <title>Simple ASCII Test</title>
     <style>
-        .container { display: flex; gap: 20px; padding: 20px; }
-        img { width: 500px; height: auto; }
-        .ascii-version {
-            font-family: monospace;
-            font-size: 6px;
-            line-height: 6px;
-            white-space: pre;
+        .container { padding: 20px; }
+        .test-square {
+            width: 100px;
+            height: 100px;
             background: black;
-            color: white;
-            padding: 10px;
-            width: 500px;
+            margin-bottom: 20px;
+        }
+        #ascii {
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <img id="test-image" 
-             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAABmJLR0QA/wD/AP+gvaeTAAABTklEQVR4nO3XQU7DMBRF0aTqBlgFS2YRbINNsA0G7RoqlUEbf/v53OfMKlnJPbIjJQAAAAAAAAAAAAAAAAAAAP7JoW9/YoyzpP5IPvXOcs/Ykm+SNyR/zDXLNWNLvlnekHwxtyxpxpZ8s7wh+WJuWdKMLc+Sb5Y3JF/MLUuase1Z8s3yhuSLuWVJM7Zdkm+WNyRfzC1LmrHtknyzvCH5Ym5Z0oxtl+Sb5Q3JF3PLkmZsuyTfLG9Ivphblt/7zD/S8i9Z0oxtl+Sb5Q3JF3PLkmZsuyTfLG9Ivphblt97/cz6e0l+h+TXLN+MsXfDLGnGtkvy29oNAAAAAAAAAAAAgHqO/QScc5577/2aMTbpLKU8j3F6XUq5tPr0WUp5G2O/ttaWVp8+Sym3/v7xvvf+0erTZ2vtc4zTe2vtq9Wnz977R2unj6WUW6tPAQAAAAAAAAAAAACAfX0DDRQsjbXvZi4AAAAASUVORK5CYII=" 
-             alt="Test Square">
-        <pre id="ascii" class="ascii-version">Loading ASCII...</pre>
+        <div class="test-square"></div>
+        <pre id="ascii">Testing ASCII output:</pre>
+        <script>
+            document.getElementById('ascii').textContent += '\n@@@@\n@@@@\n@@@@\n@@@@';
+        </script>
     </div>
-
-    <script>
-        function generateASCII(img) {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = 50;
-            canvas.height = 50;
-            
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-            
-            let ascii = '';
-            for (let y = 0; y < canvas.height; y++) {
-                for (let x = 0; x < canvas.width; x++) {
-                    const idx = (y * canvas.width + x) * 4;
-                    const brightness = (pixels[idx] + pixels[idx + 1] + pixels[idx + 2]) / 3;
-                    ascii += brightness > 128 ? '@' : '.';
-                }
-                ascii += '\n';
-            }
-            return ascii;
-        }
-
-        window.onload = () => {
-            const img = document.getElementById('test-image');
-            img.onload = () => {
-                document.getElementById('ascii').textContent = generateASCII(img);
-            };
-        };
-    </script>
 </body>
 </html>
