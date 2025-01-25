@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Met Museum Archives</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <title>Met Preview</title>
     <style>
-        body { padding: 20px; font-family: sans-serif; }
-        #status { margin-bottom: 20px; }
-        #gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .artwork { border: 1px solid #ddd; padding: 10px; }
+        .artwork { margin: 20px; padding: 10px; border: 1px solid #ddd; }
+        img { max-width: 300px; height: auto; }
     </style>
 </head>
 <body>
-    <h1>Met Museum Gallery</h1>
-    <div id="status">Loading...</div>
+    <div id="status">Status: Page Loaded</div>
     <div id="gallery"></div>
-    <script src="app.js"></script>
+    <script>
+        // Test if JavaScript runs
+        document.getElementById('status').textContent = 'Status: JavaScript Running';
+        
+        // Minimal test image
+        document.getElementById('gallery').innerHTML = `
+            <div class="artwork">
+                <img src="https://images.metmuseum.org/CRDImages/ep/original/DT1567.jpg" alt="Test Image">
+                <h3>Test Image</h3>
+            </div>`;
+    </script>
 </body>
 </html>
