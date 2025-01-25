@@ -2,6 +2,7 @@
 # Met Museum Archives
 
 Interactive gallery displaying The Metropolitan Museum of Art's Open Access Collection.
+Visible at https://coraweiss.github.io/met-museum-archives/
 
 ## Features
 - Browse over 470,000 artworks from The Met's collection
